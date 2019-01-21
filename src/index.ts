@@ -1,6 +1,9 @@
 import express, { NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
+import { userRouter } from './routers/user.router';
+import { authRouter } from './routers/auth.router';
+import * as Data from './data';
 
 const app = express();
 

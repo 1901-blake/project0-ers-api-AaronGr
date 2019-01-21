@@ -14,7 +14,7 @@ const financeManager = new Role(3, 'finance-manager');
 export let roles: Role[] = [employee, admin, financeManager];
 
 const aaron: User = new User(1, 'aaron', 'password', 'aaron', 'gravelle', 'aaron@gmail.com', employee);
-const blake: User = new User(2, 'blake', 'blake', 'blake', 'kruppa', 'blak@gmail.com', admin);
+const blake: User = new User(2, 'blake', 'blake', 'blake', 'kruppa', 'blake@gmail.com', admin);
 const ben: User = new User(3, 'ben', 'benjamin', 'ben', 'codebeast', 'ben@hotmail.com', financeManager);
 export let users: User[] = [aaron, blake, ben];
 
@@ -28,3 +28,5 @@ const travel: ReimbursementType = new ReimbursementType(2, 'Travel');
 const food: ReimbursementType = new ReimbursementType(3, 'Food');
 const other: ReimbursementType = new ReimbursementType(4, 'Other');
 export let reimburseTypes: ReimbursementType[] = [lodging, travel, food, other];
+
+export let reimbursements: Reimbursement[] = [];
