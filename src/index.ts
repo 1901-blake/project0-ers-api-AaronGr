@@ -25,7 +25,7 @@ const sessionConfig = {
 
 app.use(session(sessionConfig));
 
-app.use('/login', authRouter);
+app.use('/auth', authRouter);
 
 app.listen(3100);
 console.log('ERS application started on port: 3100');

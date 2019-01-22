@@ -7,6 +7,7 @@ export const authRouter = express.Router();
 
 authRouter.post('/login', (req, res) => {
   // Check that user exists and store them in variable
+  // TODO refactor to use truthy
   const user: User = users.find( ele => {
     return req.body.username === ele.username;
   });
