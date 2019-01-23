@@ -5,7 +5,7 @@
  * Otherwise, return unauthorized status.
  */
 
- export function authMiddleware( req, res, next, roleId: number ) {
+ export function authMiddleware(req, res, next, roleId) {
     const user = req.session.user;
     switch ( roleId ) {
         case 1:
