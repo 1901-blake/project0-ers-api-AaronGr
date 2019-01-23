@@ -4,6 +4,7 @@ import session from 'express-session';
 import { userRouter } from './routers/user.router';
 import { authRouter } from './routers/auth.router';
 import * as Data from './data';
+import { reimburseRouter } from './routers/reimburse.router';
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(session(sessionConfig));
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
+app.use('/reimbursements', reimburseRouter);
 
 app.listen(3100);
 console.log('ERS application started on port: 3100');

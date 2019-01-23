@@ -29,4 +29,8 @@ const food: ReimbursementType = new ReimbursementType(3, 'Food');
 const other: ReimbursementType = new ReimbursementType(4, 'Other');
 export let reimburseTypes: ReimbursementType[] = [lodging, travel, food, other];
 
-export let reimbursements: Reimbursement[] = [];
+const reimburse1: Reimbursement = new Reimbursement(1, 1, 20, 100619, 101019,
+                                                    'Travel to Puerto Rico', 2, 1, 1);
+const reimburse2: Reimbursement = new Reimbursement(2, 2, 50, 100619, 101019,
+                                                    'Had Pizza', 3, 1, 2);
+export let reimbursements: Reimbursement[] = [reimburse1, reimburse2];
