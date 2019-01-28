@@ -1,6 +1,6 @@
 import express from 'express';
 import { User } from '../models/user';
-import { users } from '../data';
+import { users, reimbursements } from '../data';
 import { authMiddleware } from '../middleware/auth.middleware';
 
 export const userRouter = express.Router();
@@ -25,6 +25,19 @@ userRouter.patch('', (req, res) => {
         user[prop] = req.body[prop];
       }
     });
-  res.send(user);
+    res.send(user);
   }
 });
+
+// userRouter.patch('', (req, res) => {
+//   const reimbursement = reimbursements.find( ele => ele.reimbursementId === req.body.reimbursementId);
+//   if (reimbursement) {
+//     const props: string[] = Object.keys(reimbursement);
+//     props.forEach( prop => {
+//       if (req.body[prop]) {
+//         reimbursement[prop] = req.body[prop];
+//       }
+//     });
+//    res.send(reimbursement);
+//   }
+// });

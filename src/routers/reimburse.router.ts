@@ -27,7 +27,7 @@ reimburseRouter.get('/author/userId/:userId', (req, res) => {
     res.sendStatus(400);
   });
 
-  reimburseRouter.post('', (req, res) => {
+reimburseRouter.post('', (req, res) => {
     if (req.body.reimbursementId === 0) {
         Data.reimbursements.push(req.body);
         res.status(201).send(req.body);
