@@ -1,30 +1,19 @@
 import express from 'express';
 import * as Data from '../data';
 import { STATUS_CODES } from 'http';
+import { ReimbursementDao } from '../dao/reimburse-dao';
 
 export const reimburseRouter = express.Router();
+const reimbursmentDao = new ReimbursementDao();
 
 reimburseRouter.get('/status/:statusId', (req, res) => {
-  const reimbursements = Data.reimbursements.filter( ele => {
-      return ele.status === +req.params.statusId;
-  });
-
-  if (reimbursements) {
-      res.status(200).send(reimbursements);
-  }
-
-  res.sendStatus(400);
+    reimbursmentDao.getReimbursementsByStatusId(+req.params.statusId)
+    .then(reimbursementArray => res.status(200).send(reimbursementArray));
 });
 
 reimburseRouter.get('/author/userId/:userId', (req, res) => {
-    const reimbursements = Data.reimbursements.filter( ele => {
-        return ele.author === +req.params.userId;
-    });
-
-    if (reimbursements) {
-        res.status(200).send(reimbursements);
-    }
-    res.sendStatus(400);
+    reimbursmentDao.getReimbursementsByUserId(+req.params.userId)
+    .then(reimbursementArray => res.status(200).send(reimbursementArray));
   });
 
 reimburseRouter.post('', (req, res) => {
