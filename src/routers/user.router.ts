@@ -8,14 +8,13 @@ export const userRouter = express.Router();
 const userDao = new UserDao();
 
 userRouter.get('', (req, res) => {
-  userDao.getAllUsers().then( userArray => res.json(userArray)).catch( () => res.status(500));
+  userDao.getAllUsers().then( userArray => res.json(userArray));
 });
 
-// userRouter.get('/:id', (req, res) => {
-//   const userID = +req.params.id;
-//   const user = users.find( ele => ele.userId === userID);
-//   res.json(user);
-// });
+userRouter.get('/:id', (req, res) => {
+  const userID = +req.params.id;
+  userDao.getUserByID(userID).then( user => res.json(user));
+});
 
 // // To update the user UserID must be present
 // userRouter.patch('', (req, res) => {
