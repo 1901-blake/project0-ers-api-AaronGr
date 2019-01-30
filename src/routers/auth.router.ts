@@ -1,25 +1,22 @@
 import express from 'express';
 import { users } from '../data';
 import { User } from '../models/user';
+import { UserDao } from '../dao/user-dao';
 
 export const authRouter = express.Router();
+const userDao = new UserDao;
 
+ authRouter.post('/login', (req, res) => {
+  let user: User;
 
-authRouter.post('/login', (req, res) => {
-  // Check that user exists and store them in variable
-  // TODO refactor to use truthy
-  const user: User = users.find( ele => {
-    return req.body.username === ele.username;
-  });
-
-  // If they exist check password of request matches
-  if ( user ) {
-    if ( req.body.password === user.password ) {
+  userDao.checkUserLogin(req.body.username, req.body.password)
+  .then( u => {
+     user = u;
+     if ( user ) {
       req.session.user = user;
       res.json(user);
-    }
-  }
-
-  // If user doesn't exist or incorrect password return 400
-  res.status(400).json({ message: 'Invalid Credentials'});
+     }
+     // If user doesn't exist or incorrect password return 400
+      res.status(400).json({ message: 'Invalid Credentials'});
+  });
 });

@@ -3,6 +3,34 @@ import { SessionFactory } from '../util/session-factory';
 
 export class UserDao {
 
+    public async checkUserLogin(username: string, password: string): Promise<User> {
+        const pool = SessionFactory.getConnectionPool();
+        const client = await pool.connect();
+        try {
+            const result = await client.query(`SELECT * FROM "user" INNER JOIN "role" USING(roleid)
+                                               WHERE username = $1 AND password = $2;`, [username, password]);
+            if (result.rows[0]) {
+                const userData = result.rows[0];
+                return {
+                    userId: userData['userid'],
+                    username: userData['username'],
+                    password: '',
+                    firstName: userData['firstname'],
+                    lastName: userData['lastname'],
+                    email: userData['email'],
+                    role: {
+                        roleId: userData['roleid'],
+                        role: userData['role']
+                    }
+                };
+            } else {
+                return undefined;
+            }
+        } finally {
+            client.release();
+        }
+    }
+
     public async getAllUsers(): Promise<User[]> {
         const pool = SessionFactory.getConnectionPool();
         const client = await pool.connect();
