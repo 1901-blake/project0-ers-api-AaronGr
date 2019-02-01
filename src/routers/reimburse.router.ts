@@ -25,19 +25,19 @@ reimburseRouter.post('', (req, res) => {
     }
   });
 
-// To update the user UserID must be present
-reimburseRouter.patch('', (req, res) => {
-    // Retrieve user first
-    userDao.getUserByID(req.body.userId).then( user => {
-      const props: string[] = Object.keys(user);
-      props.forEach( prop => {
-        // Only change value of user if one was supplied in request
-        if (req.body[prop]) {
-          user[prop] = req.body[prop];
-        }
-      });
-      // Call Dao to update the user with new values
-      userDao.updateUser(user).then( userForUpdating => {
-          res.send(userForUpdating);
-      });
-    });
+// // To update the user UserID must be present
+// reimburseRouter.patch('', (req, res) => {
+//     // Retrieve user first
+//     userDao.getUserByID(req.body.userId).then( user => {
+//       const props: string[] = Object.keys(user);
+//       props.forEach( prop => {
+//         // Only change value of user if one was supplied in request
+//         if (req.body[prop]) {
+//           user[prop] = req.body[prop];
+//         }
+//       });
+//       // Call Dao to update the user with new values
+//       userDao.updateUser(user).then( userForUpdating => {
+//           res.send(userForUpdating);
+//       });
+//     });
