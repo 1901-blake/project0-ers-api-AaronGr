@@ -8,9 +8,9 @@ pipeline {
     environment {
         JENKINS_NODE_COOKIE = 'dontkill'
         PORT="3000"
-        DB_USERNAME="${DB_USERNAME}"
-        DB_URL="${DB_URL}"
-        DB_PASSWORD="${DB_PASSWORD}"
+        PostgreSQLUser="${DB_USERNAME}"
+        PostgreSQLEndpoint="${DB_URL}"
+        PostgreSQLPassword="${DB_PASSWORD}"
     }
     
     stages {
