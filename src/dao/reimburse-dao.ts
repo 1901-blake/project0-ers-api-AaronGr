@@ -57,4 +57,31 @@ export class ReimbursementDao {
           client.release(); // release connection
         }
       }
+
+      public async updateReimbursement(reimb: Reimbursement): Promise<Reimbursement> {
+        const pool = SessionFactory.getConnectionPool();
+        const client = await pool.connect();
+        try {
+            const query = {
+                text: `UPDATE reimbursement
+                        SET username = $1,
+                            firstname = $2,
+                            lastname = $3,
+                            email = $4,
+                            roleid = $5
+                        WHERE userid = $6
+                        RETURNING *`,
+                values: [user.username,  user.firstName, user.lastName,
+                         user.email, user.role.roleId, user.userId]
+            };
+            const result = await client.query(query);
+            if (result.rows[0]) {
+                return convertToUserForResponse(result.rows[0]);
+            } else {
+                return undefined;
+            }
+        } finally {
+            client.release();
+        }
+    }
 }

@@ -1,11 +1,12 @@
 import express from 'express';
 import { User } from '../models/user';
-// import { users, reimbursements } from '../data';
 import { authMiddleware } from '../middleware/auth.middleware';
 import { UserDao } from '../dao/user-dao';
+import { ReimbursementDao } from '../dao/reimburse-dao';
 
 export const userRouter = express.Router();
 const userDao = new UserDao();
+const reimburseDao = new ReimbursementDao();
 
 userRouter.get('', (req, res) => {
   userDao.getAllUsers().then( userArray => res.json(userArray));
@@ -33,16 +34,3 @@ userRouter.patch('', (req, res) => {
     });
   });
 });
-
-// userRouter.patch('', (req, res) => {
-//   const reimbursement = reimbursements.find( ele => ele.reimbursementId === req.body.reimbursementId);
-//   if (reimbursement) {
-//     const props: string[] = Object.keys(reimbursement);
-//     props.forEach( prop => {
-//       if (req.body[prop]) {
-//         reimbursement[prop] = req.body[prop];
-//       }
-//     });
-//    res.send(reimbursement);
-//   }
-// });
