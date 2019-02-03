@@ -8,7 +8,7 @@ import { Response } from 'express-serve-static-core';
  */
 
  // Wrapper function to pass parameters needed to decide permissions
- export function authMiddleware(...roles: string[]) {
+ export function authMiddleware(roles: string[], userId?: number) {
    return (req: Request, res: Response, next) => {
       const user = req.session.user;
       if (!user) {

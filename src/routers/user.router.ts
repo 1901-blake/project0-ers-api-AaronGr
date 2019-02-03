@@ -8,7 +8,7 @@ export const userRouter = express.Router();
 const userDao = new UserDao();
 const reimburseDao = new ReimbursementDao();
 
-userRouter.get('', [authMiddleware('admin', 'finance-manager'), (req, res) => {
+userRouter.get('', [authMiddleware(['admin', 'finance-manager']), (req, res) => {
   userDao.getAllUsers().then( userArray => res.json(userArray));
 }]);
 
