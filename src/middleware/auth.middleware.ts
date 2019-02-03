@@ -1,3 +1,5 @@
+import { Request } from 'express';
+import { Response } from 'express-serve-static-core';
 
 /**
  * Checks that user has right authorization for next piece of middleware.
@@ -5,27 +7,27 @@
  * Otherwise, return unauthorized status.
  */
 
- export function authMiddleware(req, res, next, roleId) {
-    const user = req.session.user;
-    switch ( roleId ) {
-        case 1:
-          next();
-          break;
-        case 2:
-          if (user && user.role.roleId === 2) {
-              next();
-          } else {
-            res.status(401).json( { message: 'The incoming token has expired'} );
-          }
-          break;
-        case 3:
-          if (user && user.role.roleId === 3) {
-            next();
-          } else {
-            res.status(401).json( { message: 'The incoming token has expired'} );
-          }
-          break;
-        default:
-          res.status(401).json( { message: 'The incoming token has expired'} );
-    }
- }
+ // Wrapper function to pass parameters needed to decide permissions
+ export function authMiddleware(...roles: string[]) {
+   return (req: Request, res: Response, next) => {
+      const user = req.session.user;
+      if (!user) {
+        res.sendStatus(401);
+        return;
+      }
+
+   const accessGranted = roles.some(role => {
+      if (user.role.role === role) {
+        return true;
+      } else {
+        return false;
+      }
+   });
+
+   if (accessGranted) {
+     next();
+   } else {
+     res.sendStatus(403);
+   }
+ };
+}

@@ -14,6 +14,7 @@ const userDao = new UserDao;
      user = u;
      if ( user ) {
       req.session.user = user;
+      console.log(req.session.user);
       res.json(user);
      }
      // If user doesn't exist or incorrect password return 400

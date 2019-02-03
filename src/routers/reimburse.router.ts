@@ -37,7 +37,6 @@ reimburseRouter.patch('', (req, res) => {
       });
       // Call Dao to update the reimbursements with new values
       reimbursmentDao.updateReimbursement(reimb).then( reimbForUpdating => {
-
           res.json(reimbForUpdating);
       });
     });

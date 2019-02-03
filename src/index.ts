@@ -24,8 +24,6 @@ const sessionConfig = {
     saveUnitilialized: false
 };
 
-app.use(session(sessionConfig));
-
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/reimbursements', reimburseRouter);
