@@ -77,7 +77,7 @@ export class UserDao {
                             roleid = $5
                         WHERE userid = $6
                         RETURNING *`,
-                values: [user.username,  user.firstName, user.lastName,
+                values: [user.username, user.firstName, user.lastName,
                          user.email, user.role.roleId, user.userId]
             };
             const result = await client.query(query);

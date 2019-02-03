@@ -2,6 +2,24 @@ import { Reimbursement } from '../models/reimbursement';
 import { SessionFactory } from '../util/session-factory';
 
 export class ReimbursementDao {
+    public async getReimbursementById(id: number): Promise<Reimbursement> {
+        const pool = SessionFactory.getConnectionPool();
+        const client = await pool.connect();
+        try {
+          const query = {
+              text: `SELECT * FROM reimbursement WHERE reimbursementid = $1`,
+              values: [id]
+          };
+
+          const result = await client.query(query);
+          // Need to convert row data returned to a reimbursement javascript object
+          console.log(result.rows[0]);
+          return convertToReimbursementForResponse(result.rows[0]);
+        } finally {
+            client.release();
+        }
+    }
+
     public async getReimbursementsByStatusId(id: number): Promise<Reimbursement[]> {
         const pool = SessionFactory.getConnectionPool();
         const client = await pool.connect();
@@ -61,22 +79,25 @@ export class ReimbursementDao {
       public async updateReimbursement(reimb: Reimbursement): Promise<Reimbursement> {
         const pool = SessionFactory.getConnectionPool();
         const client = await pool.connect();
+        console.log(reimb);
         try {
             const query = {
                 text: `UPDATE reimbursement
-                        SET username = $1,
-                            firstname = $2,
-                            lastname = $3,
-                            email = $4,
-                            roleid = $5
-                        WHERE userid = $6
+                        SET author = $1,
+                            amount = $2,
+                            dateResolved = $3,
+                            description = $4,
+                            resolver = $5,
+                            status = $6,
+                            type = $7
+                        WHERE reimbursementId = $8
                         RETURNING *`,
-                values: [user.username,  user.firstName, user.lastName,
-                         user.email, user.role.roleId, user.userId]
+                values: [reimb.author, reimb.amount, reimb.dateResolved, reimb.description,
+                         reimb.resolver, reimb.status, reimb.type, reimb.reimbursementId]
             };
             const result = await client.query(query);
             if (result.rows[0]) {
-                return convertToUserForResponse(result.rows[0]);
+                return convertToReimbursementForResponse(result.rows[0]);
             } else {
                 return undefined;
             }
@@ -84,4 +105,18 @@ export class ReimbursementDao {
             client.release();
         }
     }
+}
+
+function convertToReimbursementForResponse(reimbursementData: any): Reimbursement | PromiseLike<Reimbursement> {
+    return {
+        reimbursementId: reimbursementData['reimbursementid'],
+        author: reimbursementData['author'],
+        amount: reimbursementData['amount'],
+        dateSubmitted: reimbursementData['datesubmitted'],
+        dateResolved: reimbursementData['dateresolved'],
+        description: reimbursementData['description'],
+        resolver: reimbursementData['resolver'],
+        status: reimbursementData['staus'],
+        type: reimbursementData['type']
+    };
 }

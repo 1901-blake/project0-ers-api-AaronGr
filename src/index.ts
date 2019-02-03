@@ -30,5 +30,5 @@ app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/reimbursements', reimburseRouter);
 
-app.listen(3100);
-console.log('ERS application started on port: 3100');
+app.listen(3000);
+console.log('ERS application started on port: 3000');
