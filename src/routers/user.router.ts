@@ -12,13 +12,13 @@ userRouter.get('', [authMiddleware(['admin', 'finance-manager']), (req, res) => 
   userDao.getAllUsers().then( userArray => res.json(userArray));
 }]);
 
-userRouter.get('/:id', (req, res) => {
+userRouter.get('/:id', [authMiddleware(['admin', 'associate', 'financial-manager']), (req, res) => {
   const userID = +req.params.id;
   userDao.getUserByID(userID).then( user => res.json(user));
-});
+}]);
 
 // To update the user UserID must be present
-userRouter.patch('', (req, res) => {
+userRouter.patch('', [authMiddleware(['admin', 'associate', 'financial-manager']), (req, res) => {
   // Retrieve user first
   userDao.getUserByID(req.body.userId).then( user => {
     const props: string[] = Object.keys(user);
@@ -33,4 +33,4 @@ userRouter.patch('', (req, res) => {
         res.send(userForUpdating);
     });
   });
-});
+}]);
