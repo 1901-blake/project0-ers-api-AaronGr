@@ -9,7 +9,7 @@ userRouter.get('', [authMiddleware(['admin', 'finance-manager']), (req, res) => 
   userDao.getAllUsers().then( userArray => res.json(userArray));
 }]);
 
-userRouter.get('/:id', // (req, res) =>  {req.body.userId  = +req.params.id; },
+userRouter.get('/:id',
   [authMiddleware(['admin', 'associate', 'finance-manager']),
   (req, res) => {
     const userID = +req.params.id;

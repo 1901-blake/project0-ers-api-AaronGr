@@ -25,7 +25,7 @@ export class ReimbursementDao {
         const client = await pool.connect();
         try {
           const query = {
-              text: `SELECT * FROM reimbursement WHERE status = $1`,
+              text: `SELECT * FROM reimbursement WHERE status = $1 ORDER BY datesubmitted;`,
               values: [id]
           };
 
@@ -42,7 +42,7 @@ export class ReimbursementDao {
         const client = await pool.connect();
         try {
           const query = {
-              text: `SELECT * FROM reimbursement WHERE author = $1`,
+              text: `SELECT * FROM reimbursement WHERE author = $1 ORDER BY datesubmitted;`,
               values: [id]
           };
 
