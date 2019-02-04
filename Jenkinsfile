@@ -56,7 +56,7 @@ pipeline {
             steps {
                 dir('project0-ers-api-AaronGr') {
                     // deploy the application in the background
-                    sh 'nohup npm run deploy'                      
+                    sh 'nohup npm run deploy &'                      
                     // use the one below instead of the one above if you want the build to never end but see the console outputs of the api
                     // sh 'npm run deploy'
                 }
