@@ -16,9 +16,23 @@ import { Response } from 'express-serve-static-core';
         return;
       }
 
+    // TODO if this works refactor;
    const accessGranted = roles.some(role => {
-      if (user.role.role === role) {
+     // For checking if a id parameter was sent with the request
+      const id = req.url.slice(1); // Remove '/'
+      console.log(`Id: ${id}, Role: ${user.role.role}`);
+      if (user.role.role === 'admin') {
         return true;
+      } else if (user.role.role === role) {
+          // If the user matches id passed, grant access
+          if (id && user.userId === +id) {
+            return true;
+            // Otherwise, allow if a financial manager
+          } else if (user.role.role === 'finance-manager') {
+            return true;
+          } else {
+          return false;
+        }
       } else {
         return false;
       }
