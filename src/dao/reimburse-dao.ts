@@ -116,7 +116,7 @@ function convertToReimbursementForResponse(reimbursementData: any): Reimbursemen
         dateResolved: reimbursementData['dateresolved'],
         description: reimbursementData['description'],
         resolver: reimbursementData['resolver'],
-        status: reimbursementData['staus'],
+        status: reimbursementData['status'],
         type: reimbursementData['type']
     };
 }
