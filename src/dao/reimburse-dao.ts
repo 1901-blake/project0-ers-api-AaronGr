@@ -2,6 +2,17 @@ import { Reimbursement } from '../models/reimbursement';
 import { SessionFactory } from '../util/session-factory';
 
 export class ReimbursementDao {
+  public async getAllReimbursements(): Promise<Reimbursement[]> {
+    const pool = SessionFactory.getConnectionPool();
+    const client = await pool.connect();
+    try {
+      const result = await client.query('SELECT * FROM reimbursement;');
+      return result.rows.map ( reimb => convertToReimbursementForResponse(reimb));
+    } finally {
+        client.release(); // release connection
+    }
+}
+
     public async getReimbursementById(id: number): Promise<Reimbursement> {
         const pool = SessionFactory.getConnectionPool();
         const client = await pool.connect();
@@ -30,7 +41,7 @@ export class ReimbursementDao {
           };
 
           const result = await client.query(query);
-          return result.rows;
+          return result.rows.map(reimb => convertToReimbursementForResponse(reimb));
 
         } finally {
             client.release(); // release connection
@@ -47,7 +58,7 @@ export class ReimbursementDao {
           };
 
           const result = await client.query(query);
-          return result.rows;
+          return result.rows.map(reimb => convertToReimbursementForResponse(reimb));
 
         } finally {
             client.release(); // release connection
@@ -107,7 +118,7 @@ export class ReimbursementDao {
     }
 }
 
-function convertToReimbursementForResponse(reimbursementData: any): Reimbursement | PromiseLike<Reimbursement> {
+function convertToReimbursementForResponse(reimbursementData: any): Reimbursement {
     return {
         reimbursementId: reimbursementData['reimbursementid'],
         author: reimbursementData['author'],

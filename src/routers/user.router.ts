@@ -5,10 +5,6 @@ import { UserDao } from '../dao/user-dao';
 export const userRouter = express.Router();
 const userDao = new UserDao();
 
-userRouter.get('/test', (req, res) => {
-  console.log('This is only a test');
-});
-
 userRouter.get('', [authMiddleware(['admin', 'finance-manager']), (req, res) => {
   userDao.getAllUsers().then( userArray => res.json(userArray));
 }]);
