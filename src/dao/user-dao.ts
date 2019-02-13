@@ -25,20 +25,7 @@ export class UserDao {
         const client = await pool.connect();
         try {
           const result = await client.query('SELECT * FROM "user" INNER JOIN "role" USING(roleid);');
-          return result.rows.map ( user => {
-              return {
-                userId: user['userid'],
-                username: user['username'],
-                password: '',
-                firstName: user['firstname'],
-                lastName: user['lastname'],
-                email: user['email'],
-                role: {
-                    roleId: user['roleid'],
-                    role: user['role']
-                }
-              };
-          });
+          return result.rows.map ( user => convertToUserForResponse(user));
         } finally {
             client.release(); // release connection
         }
@@ -92,7 +79,7 @@ export class UserDao {
     }
 }
 
-function convertToUserForResponse(userData: any): User | PromiseLike<User> {
+function convertToUserForResponse(userData: any): User {
     return {
         userId: userData['userid'],
         username: userData['username'],
