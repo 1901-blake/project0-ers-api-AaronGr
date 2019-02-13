@@ -6,7 +6,37 @@ export class ReimbursementDao {
     const pool = SessionFactory.getConnectionPool();
     const client = await pool.connect();
     try {
-      const result = await client.query('SELECT * FROM reimbursement;');
+      const result = await client.query(`select reimbursement.reimbursementid,
+                                                reimbursement.author as authorid,
+                                                reimbursement.datesubmitted,
+                                                reimbursement.dateresolved,
+                                                reimbursement.description,
+                                                reimbursement.resolver as resolverid,
+                                                reimbursement.status as statusid,
+                                                reimbursement."type" as typeid,
+                                                author.username as author_username,
+                                                author."password" as author_password,
+                                                author.firstname as author_firstname,
+                                                author.lastname as author_lastname,
+                                                author.email as author_email,
+                                                author.roleid as author_roleid,
+                                                author_role."role" as author_role,
+                                                reimbursement_status.status as status_text,
+                                                reimbursement_type."type" as type_text,
+                                                resolver.username as resolver_username,
+                                                resolver."password" as resolver_password,
+                                                resolver.firstname as resolver_firstname,
+                                                resolver.lastname as resolver_lastname,
+                                                resolver.email as resolver_email,
+                                                resolver.roleid as resolver_roleid,
+                                                resolver_role."role" as resolver_role
+                                            FROM reimbursement
+                                            inner join "user" author on reimbursement.author = author.userid
+                                            inner join "role" author_role on author.roleid = author_role.roleid
+                                            INNER JOIN "user" resolver on reimbursement.resolver = resolver.userid
+                                            inner join "role" resolver_role on resolver.roleid = resolver_role.roleid
+                                            inner join reimbursement_status on reimbursement.status = reimbursement_status.statusid
+                                            inner join reimbursement_type on reimbursement."type" = reimbursement_type.typeid`);
       return result.rows.map ( reimb => convertToReimbursementForResponse(reimb));
     } finally {
         client.release(); // release connection
@@ -121,13 +151,30 @@ export class ReimbursementDao {
 function convertToReimbursementForResponse(reimbursementData: any): Reimbursement {
     return {
         reimbursementId: reimbursementData['reimbursementid'],
-        author: reimbursementData['author'],
+        author: {
+          userId: reimbursementData['authorid'],
+          username: reimbursementData['author_username'],
+          password: '',
+          firstName: reimbursementData['author_firstname'],
+          lastName: reimbursementData['author_lastname'],
+          email: reimbursementData['author_email'],
+          role: {
+            roleId: reimbursementData['author_roleid'],
+            role: reimbursementData['author_role']
+          }
+        },
         amount: reimbursementData['amount'],
         dateSubmitted: reimbursementData['datesubmitted'],
         dateResolved: reimbursementData['dateresolved'],
         description: reimbursementData['description'],
         resolver: reimbursementData['resolver'],
-        status: reimbursementData['status'],
-        type: reimbursementData['type']
+        status: {
+          statusId: reimbursementData['statusid'],
+          status: reimbursementData['status_text']
+        },
+        type: {
+          typeId: reimbursementData['typeid'],
+          type: reimbursementData['type_text']
+        }
     };
 }
